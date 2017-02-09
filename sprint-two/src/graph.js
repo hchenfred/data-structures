@@ -29,11 +29,28 @@ Graph.prototype.contains = function(node) {
   return containsHelper(this);
 };
 
+Graph.prototype.findNode = function(node) {
+  var findNodeHelper = function(currentNode) {
+    if (currentNode.value === node) {
+      return currentNode;
+    } else if (currentNode.adj.length > 0) {
+      for (var i = 0; i < currentNode.adj.length; i++) {
+        var foundNode = findNodeHelper(currentNode.adj[i]);
+        if (foundNode !== null) {
+          return foundNode;
+        }
+      }
+    } 
+    return null;
+  };
+  return findNodeHelper(this);
+};
+
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(node) {
 
 
-  var findNode = function(currentNode) {
+  /*var findNode = function(currentNode) {
     if (currentNode.value === node) {
       return currentNode;
     } else if (currentNode.adj.length > 0) {
@@ -45,14 +62,18 @@ Graph.prototype.removeNode = function(node) {
       }
     } 
     return null;
-  };
-  var foundNode = findNode(this);
+  };*/
+  var foundNode = this.findNode(node);
+  console.log(foundNode.value);
   if (foundNode) {
     var neighbors = foundNode.adj;
+    foundNode.adj = [];
     _.each(neighbors, function(neighbor) {
-      neighbor.adj = _.filter(neighbor.adj, function(item) {
-        return item === findNode;
+      console.log(neighbor);
+      neighbor.adj = _.reject(neighbor.adj, function(item) {
+        return item === foundNode;
       });
+      console.log(neighbor.adj);
     });
   }
 };
@@ -63,7 +84,7 @@ Graph.prototype.hasEdge = function(fromNode, toNode) {
 
 // Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNode, toNode) {
-  
+
 };
 
 // Remove an edge between any two specified (by value) nodes.
