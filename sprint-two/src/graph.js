@@ -29,12 +29,12 @@ Graph.prototype.contains = function(node) {
   return containsHelper(this);
 };
 
-Graph.prototype.findNode = function(node) {
+Graph.prototype.findNode = function(nodeValue) {
   var marked = [];
   var findNodeHelper = function(currentNode) {
   
     marked.push(currentNode);
-    if (currentNode.value === node) {
+    if (currentNode.value === nodeValue) {
       return currentNode;
     } else if (currentNode.adj.length > 0) {
       for (var i = 0; i < currentNode.adj.length; i++) {
@@ -52,8 +52,8 @@ Graph.prototype.findNode = function(node) {
 };
 
 // Removes a node from the graph.
-Graph.prototype.removeNode = function(node) {
-  var foundNode = this.findNode(node);
+Graph.prototype.removeNode = function(nodeValue) {
+  var foundNode = this.findNode(nodeValue);
   if (foundNode) {
     var neighbors = foundNode.adj;
     foundNode.adj = [];
@@ -83,7 +83,17 @@ Graph.prototype.addEdge = function(fromNodeValue, toNodeValue) {
 };
 
 // Remove an edge between any two specified (by value) nodes.
-Graph.prototype.removeEdge = function(fromNode, toNode) {
+Graph.prototype.removeEdge = function(fromNodeValue, toNodeValue) {
+  var fromNode = this.findNode(fromNodeValue);
+  var toNode = this.findNode(toNodeValue);
+  fromNode.adj = _.reject(fromNode.adj, function(adjNode) {
+    return adjNode === toNode;
+  });
+  toNode.adj = _.reject(toNode.adj, function(adjNode) {
+    return adjNode === fromNode;
+  });
+
+
 };
 
 // Pass in a callback which will be executed on each node of the graph.
