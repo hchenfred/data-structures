@@ -5,34 +5,20 @@ var Graph = function(value) {
 };
 
 // Add a node to the graph, passing in the node's value.
-Graph.prototype.addNode = function(node) {
-  var newNode = new Graph(node);
+Graph.prototype.addNode = function(nodeValue) {
+  var newNode = new Graph(nodeValue);
   this.adj.push(newNode);
   newNode.adj.push(this);
 };
 
 // Return a boolean value indicating if the value passed to contains is represented in the graph.
-Graph.prototype.contains = function(node) {
-  
-  var containsHelper = function(currentNode) {
-    if (currentNode.value === node) {
-      return true;
-    } else if (currentNode.adj.length > 0) {
-      for (var i = 0; i < currentNode.adj.length; i++) {
-        if (containsHelper(currentNode.adj[i])) {
-          return true;
-        }
-      }
-    } 
-    return false;
-  };
-  return containsHelper(this);
+Graph.prototype.contains = function(nodeValue) {
+  return !!this.findNode(nodeValue);
 };
 
 Graph.prototype.findNode = function(nodeValue) {
-  var marked = [];
+  var marked = [];             
   var findNodeHelper = function(currentNode) {
-  
     marked.push(currentNode);
     if (currentNode.value === nodeValue) {
       return currentNode;
@@ -61,14 +47,13 @@ Graph.prototype.removeNode = function(nodeValue) {
       neighbor.adj = _.reject(neighbor.adj, function(item) {
         return item === foundNode;
       });
-    });
+    }); 
   }
 };
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
 Graph.prototype.hasEdge = function(fromNodeValue, toNodeValue) {
   var fromNode = this.findNode(fromNodeValue);
-  //console.log(fromNode);
   var toNode = this.findNode(toNodeValue);
   return fromNode.adj.includes(toNode);
 };
@@ -76,7 +61,6 @@ Graph.prototype.hasEdge = function(fromNodeValue, toNodeValue) {
 // Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNodeValue, toNodeValue) {
   var fromNode = this.findNode(fromNodeValue);
-  //console.log(fromNode);
   var toNode = this.findNode(toNodeValue);
   fromNode.adj.push(toNode);
   toNode.adj.push(fromNode);
@@ -92,16 +76,33 @@ Graph.prototype.removeEdge = function(fromNodeValue, toNodeValue) {
   toNode.adj = _.reject(toNode.adj, function(adjNode) {
     return adjNode === fromNode;
   });
-
-
 };
 
 // Pass in a callback which will be executed on each node of the graph.
 Graph.prototype.forEachNode = function(cb) {
+  var marked = [];             
+  var helper = function(currentNode) {
+    marked.push(currentNode);
+    cb(currentNode.value);
+    if (currentNode.adj.length > 0) {
+      for (var i = 0; i < currentNode.adj.length; i++) {
+        if (!marked.includes(currentNode.adj[i])) {
+          helper(currentNode.adj[i]);   
+        }
+      }
+    } 
+  };
+  helper(this);
 };
 
 /*
  * Complexity: What is the time complexity of the above functions?
  */
-
+// addNode - O(1)
+// contains - O(n)
+// removeNode - O(n^2)
+// hasEdge - O(n)
+// addEdge - O(n)
+// removeEdge - O(n)
+// forEachNode - O(n)
 
