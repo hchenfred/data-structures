@@ -30,14 +30,19 @@ Graph.prototype.contains = function(node) {
 };
 
 Graph.prototype.findNode = function(node) {
+  var marked = [];
   var findNodeHelper = function(currentNode) {
+  
+    marked.push(currentNode);
     if (currentNode.value === node) {
       return currentNode;
     } else if (currentNode.adj.length > 0) {
       for (var i = 0; i < currentNode.adj.length; i++) {
-        var foundNode = findNodeHelper(currentNode.adj[i]);
-        if (foundNode !== null) {
-          return foundNode;
+        if (!marked.includes(currentNode.adj[i])) {
+          var foundNode = findNodeHelper(currentNode.adj[i]);
+          if (foundNode !== null) {
+            return foundNode;
+          }
         }
       }
     } 
@@ -48,43 +53,33 @@ Graph.prototype.findNode = function(node) {
 
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(node) {
-
-
-  /*var findNode = function(currentNode) {
-    if (currentNode.value === node) {
-      return currentNode;
-    } else if (currentNode.adj.length > 0) {
-      for (var i = 0; i < currentNode.adj.length; i++) {
-        var foundNode = findNode(currentNode.adj[i]);
-        if (foundNode !== null) {
-          return foundNode;
-        }
-      }
-    } 
-    return null;
-  };*/
   var foundNode = this.findNode(node);
-  console.log(foundNode.value);
   if (foundNode) {
     var neighbors = foundNode.adj;
     foundNode.adj = [];
     _.each(neighbors, function(neighbor) {
-      console.log(neighbor);
       neighbor.adj = _.reject(neighbor.adj, function(item) {
         return item === foundNode;
       });
-      console.log(neighbor.adj);
     });
   }
 };
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
-Graph.prototype.hasEdge = function(fromNode, toNode) {
+Graph.prototype.hasEdge = function(fromNodeValue, toNodeValue) {
+  var fromNode = this.findNode(fromNodeValue);
+  //console.log(fromNode);
+  var toNode = this.findNode(toNodeValue);
+  return fromNode.adj.includes(toNode);
 };
 
 // Connects two nodes in a graph by adding an edge between them.
-Graph.prototype.addEdge = function(fromNode, toNode) {
-
+Graph.prototype.addEdge = function(fromNodeValue, toNodeValue) {
+  var fromNode = this.findNode(fromNodeValue);
+  //console.log(fromNode);
+  var toNode = this.findNode(toNodeValue);
+  fromNode.adj.push(toNode);
+  toNode.adj.push(fromNode);
 };
 
 // Remove an edge between any two specified (by value) nodes.
