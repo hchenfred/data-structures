@@ -54,16 +54,15 @@ var binaryTreeMethods = {
     dfs(this);
   },
   breathFirstLog: function(cb) {
-    var stack = [];
-    stack.push(this);
-    while (stack.length !== 0) {
-      var currNode = stack.shift();
-      cb(currNode.value);
-      if (!!currNode.left) {
-        stack.push(currNode.left);
+    var stack = [this];
+    while (stack.length > 0) {
+      var tree = stack.shift();
+      cb(tree.value);
+      if (tree.left !== null) {
+        stack.push(tree.left);
       }
-      if (!!currNode.right) {
-        stack.push(currNode.right);
+      if (tree.right !== null) {
+        stack.push(tree.right);
       }
     }
   }

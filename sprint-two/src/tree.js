@@ -36,11 +36,21 @@ treeMethods.contains = function(target) {
 };
 
 treeMethods.removeFromParent = function() {
-  var that = this;
   this.parent.children = _.reject(this.parent.children, function(child) {
-    return child === that;
-  });
+    return child === this;
+  }.bind(this));
   this.parent = null;
+};
+
+treeMethods.traverse = function(cb) {
+  var helper = function(currTree) {
+    cb(currTree.value);
+    var children = currTree.children;
+    _.each(children, function(child) {
+      helper(child);
+    });
+  };
+  helper(this);
 };
 
 

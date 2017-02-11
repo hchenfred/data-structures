@@ -56,4 +56,17 @@ describe('tree', function() {
     expect(toRemove.parent).to.equal(null);    
   });
 
+  it('should execute a callback on every node in a tree using traverse', function() {
+    var array = [];
+    var func = function(value) {
+      array.push(value);
+    };
+    tree.addChild(5);
+    tree.addChild(6);
+    tree.children[0].addChild(1);
+    tree.children[1].addChild(3);
+    tree.traverse(func);
+    expect(array).to.eql([undefined, 5, 1, 6, 3]);
+  });
+
 });
