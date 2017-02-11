@@ -52,6 +52,20 @@ var binaryTreeMethods = {
       } 
     };
     dfs(this);
+  },
+  breathFirstLog: function(cb) {
+    var stack = [];
+    stack.push(this);
+    while (stack.length !== 0) {
+      var currNode = stack.shift();
+      cb(currNode.value);
+      if (!!currNode.left) {
+        stack.push(currNode.left);
+      }
+      if (!!currNode.right) {
+        stack.push(currNode.right);
+      }
+    }
   }
 };
 
