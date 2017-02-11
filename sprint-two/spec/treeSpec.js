@@ -41,4 +41,19 @@ describe('tree', function() {
     expect(tree.contains(8)).to.equal(true);
   });
 
+  it('should have access to its parent node\'s value', function() {
+    tree.addChild(5);
+    tree.children[0].addChild(6);
+    expect(tree.children[0].children[0].parent.value).to.equal(5); 
+  }); 
+
+  it('should remove its parent node', function() {
+    tree.addChild(5);
+    tree.children[0].addChild(6);
+    var toRemove = tree.children[0].children[0];
+    toRemove.removeFromParent();
+    expect(tree.children[0].children.length).to.equal(0);
+    expect(toRemove.parent).to.equal(null);    
+  });
+
 });
