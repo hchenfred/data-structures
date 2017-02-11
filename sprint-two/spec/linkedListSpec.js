@@ -52,4 +52,7 @@ describe('linkedList', function() {
   });
 
   // add more tests here to test the functionality of linkedList
+  it('should throw an error when removeHead is called on an empty array', function() {
+    expect(linkedList.removeHead).to.throw('this linked list is empty');
+  });
 });

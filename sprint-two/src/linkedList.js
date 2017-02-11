@@ -20,7 +20,7 @@ var LinkedList = function() {
       list.head = list.head.next;
       return listHead;
     }
-    return undefined;
+    throw 'this linked list is empty';
   };
 
   list.contains = function(target) {

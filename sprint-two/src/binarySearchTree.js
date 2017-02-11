@@ -18,13 +18,15 @@ var binaryTreeMethods = {
         } else {
           currentNode = currentNode.left;
         }
-      } else {
+      } else if (value > currentNode.value) {
         if (!currentNode.right) {
           currentNode.right = BinarySearchTree(value);
           return;
         } else {
           currentNode = currentNode.right;
         }
+      } else {
+        return;
       }
     }
   },
@@ -43,7 +45,6 @@ var binaryTreeMethods = {
   },
   depthFirstLog: function(cb) {
     var dfs = function(treeNode) {
-      console.log(treeNode);
       if (treeNode) {
         cb(treeNode.value);
         dfs(treeNode.left);

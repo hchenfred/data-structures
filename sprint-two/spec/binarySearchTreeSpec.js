@@ -36,4 +36,14 @@ describe('binarySearchTree', function() {
     binarySearchTree.depthFirstLog(func);
     expect(array).to.eql([5, 2, 3]);
   });
+
+  it('should do nothing when adding a node that already exists', function() {
+    var array = [];
+    var func = function(value) { array.push(value); };
+    binarySearchTree.insert(6);
+    binarySearchTree.insert(6);
+    binarySearchTree.depthFirstLog(func);
+    expect(array).to.eql([5, 6]);
+  });
+
 });
